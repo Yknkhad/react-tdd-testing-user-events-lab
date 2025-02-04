@@ -1,24 +1,94 @@
-function App() {
-  return (
-    <main>
-      <h1>Hi, I'm (your name)</h1>
-      <img alt="My profile pic" src="https://via.placeholder.com/350" />
-      <h2>About Me</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </p>
+import React, { useState } from 'react';
 
-      <div>
-        <a href="https://github.com">GitHub</a>
-        <a href="https://linkedin.com">LinkedIn</a>
-      </div>
-    </main>
+function App() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [interests, setInterests] = useState({
+    coding: false,
+    design: false,
+    marketing: false,
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleNameChange = (e) => setName(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handleInterestChange = (e) => {
+    const { name, checked } = e.target;
+    setInterests((prev) => ({ ...prev, [name]: checked }));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <div>
+      <h1>Newsletter Signup</h1>
+      {!submitted ? (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="name">Name:</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </div>
+          <div>
+            <h3>Areas of Interest:</h3>
+            <label>
+              <input
+                type="checkbox"
+                name="coding"
+                checked={interests.coding}
+                onChange={handleInterestChange}
+              />
+              Coding
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="design"
+                checked={interests.design}
+                onChange={handleInterestChange}
+              />
+              Design
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="marketing"
+                checked={interests.marketing}
+                onChange={handleInterestChange}
+              />
+              Marketing
+            </label>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      ) : (
+        <div>
+          <h2>Thank you for signing up, {name}!</h2>
+          <p>
+            You are interested in{' '}
+            {Object.keys(interests)
+              .filter((key) => interests[key])
+              .join(', ')}
+            .
+          </p>
+        </div>
+      )}
+    </div>
   );
 }
 
